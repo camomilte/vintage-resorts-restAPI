@@ -1,4 +1,4 @@
-import pool from "../config/db";
+import pool from "../config/db.js";
 
 /// /
 // Get all users  
@@ -13,7 +13,7 @@ export const getAllUsersService = async () => {
 /// /
 // Get user by Id
 /// /
-export const getUserByIdSevice = async (user_id) => {
+export const getUserByIdService = async (user_id) => {
   // Execute SQL query to find user by user_id
   const result = await pool.query("SELECT * FROM users WHERE user_id = $1", [user_id]);
   // Return the first (and only) user found
@@ -23,7 +23,7 @@ export const getUserByIdSevice = async (user_id) => {
 /// / 
 // Create user
 /// /
-export const createUserSevice = async (first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, date_of_birth) => {
+export const createUserService = async (first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, date_of_birth) => {
   // Execute SQL query to insert values to users table
   const result = await pool.query(
     "INSERT INTO users (first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, date_of_birth) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
@@ -36,7 +36,7 @@ export const createUserSevice = async (first_name, last_name, email, password_ha
 /// /
 // Update existing user
 /// /
-export const updateUserSevice = async (first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, user_id) => {
+export const updateUserService = async (first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, user_id) => {
   // Execute SQL query to update user details by user_id
   const result = await pool.query(
     "UPDATE users SET first_name=$1, last_name=$2, email=$3, password_hash=$4, phone_number=$5, bio=$6, profile_picture_url=$7 WHERE user_id=$8 RETURNING *",
@@ -49,7 +49,7 @@ export const updateUserSevice = async (first_name, last_name, email, password_ha
 /// /
 // Delete user
 /// /
-export const deleteUserSevice = async (user_id) => {
+export const deleteUserService = async (user_id) => {
   // Execute SQL query to delete a user from the user table by user_id
   const result = await pool.query(
     "DELETE FROM users WHERE user_id = $1 RETURNING *",
