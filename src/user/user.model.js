@@ -36,12 +36,43 @@ export const createUserService = async (first_name, last_name, email, password_h
 /// /
 // Update existing user
 /// /
-export const updateUserService = async (first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, user_id) => {
-  // Execute SQL query to update user details by user_id
-  const result = await pool.query(
-    "UPDATE users SET first_name=$1, last_name=$2, email=$3, password_hash=$4, phone_number=$5, bio=$6, profile_picture_url=$7 WHERE user_id=$8 RETURNING *",
-    [first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, user_id]
-  );
+export const updateUserService = async (user_id, updates) => {
+  // Check that fields to update are provided
+  if (!updates || Object.keys(updates).length === 0) {
+    throw new Error("No fields provided for update");
+  }
+
+  // Dynamic SQL query parts
+  const setClauses = [];
+  const values = [];
+  let index = 1;
+
+  for (const [key, value] of Object.entries(updates)) {
+    // If value is undefined: skip
+    if (value !== undefined) {
+      // Add SET clause to query
+      setClauses.push(`${key} = $${index}`);
+      // Push values into values array
+      values.push(value);
+      // Increase index counter so next field gets corresponding placeholder number
+      index++;
+    }
+  }
+
+  // Check that there are fields to update provided
+  if (setClauses.length === 0) {
+    throw new Error("No valid fields provided for update");
+  }
+
+  // Add user_id as final parameter
+  values.push(user_id);
+
+  // Build SQL query
+  const query = `UPDATE users SET ${setClauses.join(", ")} WHERE user_id = $${index} RETURNING *;`;
+
+  // Run query with values
+  const result = await pool.query(query, values);
+
   // Return updated user
   return result.rows[0];
 };

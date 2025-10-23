@@ -1,4 +1,4 @@
-import { createUserService, getAllUsersService, getUserByIdService, updateUserService } from "./user.model.js";
+import { createUserService, deleteUserService, getAllUsersService, getUserByIdService, updateUserService } from "./user.model.js";
 
 /// /
 // Standardized response function
@@ -42,7 +42,7 @@ export const getAllUsers = async (req, res, next) => {
 
     // Success response
     handleResponse(res, 200, "Users fetched successfully", users)
-    
+
   } catch (err) {
 
     // Pass error to error handler
@@ -71,26 +71,39 @@ export const getUserById = async (req, res, next) => {
   }
 };
 
-// TODO: Update so thhat unedited fields remain untouched
 /// /
 // Update user
 /// /
 export const updateUser = async (req, res, next) => {
   try {
-    // Destructure fields from request body
-    const { first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url } = req.body;
-    
-    // Call service to update user
-    const user = await updateUserService(req.params.user_id, first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url);
+    const userId = req.params.user_id;
 
-    // Check if user exists
-    if(!user) return handleResponse(res, 404, "User not found!");
+    // Validate user Id
+    if (isNaN(userId)) return handleResponse(res, 400, "invalid user ID");
+
+    // Check if user id exists
+    if(!userId) return handleResponse(res, 404, "User not found!");
+
+    // Call service to update user
+    const updatedUser = await updateUserService(userId, req.body);
 
     // Success response 
-    handleResponse(res, 200, "User updated successfully", user);
+    handleResponse(res, 200, "User updated successfully", updatedUser);
 
   } catch (err) {
     // Pass error to error handler
+    next(err)
+  }
+};
+
+/// /
+// Delete user
+/// /
+export const deleteUser = async (req, res, next) => {
+  try {
+    const deletedUser = await deleteUserService(req.params.user_id);
+    handleResponse(res, 200, "User deleted successfully", deleteUser);
+  } catch (err) {
     next(err)
   }
 };
