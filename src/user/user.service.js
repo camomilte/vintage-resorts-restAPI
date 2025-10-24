@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import bcrypt from "bcrypt";
 
 /// /
 // Get all users  
@@ -23,7 +24,10 @@ export const getUserByIdService = async (user_id) => {
 /// / 
 // Create user
 /// /
-export const createUserService = async (first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, date_of_birth) => {
+export const createUserService = async (first_name, last_name, email, password, phone_number, bio, profile_picture_url, date_of_birth) => {
+  // Hash password
+  const password_hash = await bcrypt.hash(password, 10);
+
   // Execute SQL query to insert values to users table
   const result = await pool.query(
     "INSERT INTO users (first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, date_of_birth) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",

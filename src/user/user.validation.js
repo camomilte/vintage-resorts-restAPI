@@ -27,7 +27,7 @@ export const createUserSchema = Joi.object({
       "any.required": "Email is required",
   }),
 
-  password_hash: Joi.string().min(6).required()
+  password: Joi.string().min(6).required()
     .messages({
       "string.min": "Password must be at least 6 characters long",
       "any.required": "Password is required",
@@ -85,8 +85,8 @@ export const updateUserSchema = Joi.object({
   bio: Joi.string().max(300).allow(null, ""),
 
   profile_picture_url: Joi.string().uri().allow(null, "")
-  
-}).min(1)
+
+}).min(1) // Require at least one field to update
   .messages({
     "object.min": "You must provide at least one field to update"
 });

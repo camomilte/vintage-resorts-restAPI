@@ -1,6 +1,6 @@
 import express from 'express';
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from './user.controller.js';
-import { validateBody } from '../middleware/validateBody.js';
+import { validateBody } from '../middleware/validateBody.middleware.js';
 import { createUserSchema, updateUserSchema } from './user.validation.js';
 
 // Initialize router for user-related endpoints

@@ -17,10 +17,10 @@ const handleResponse = (res, status, message, data = null) => {
 export const createUser = async (req, res, next) => {
   try {
     // Destructure fields from request body
-    const { first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, date_of_birth } = req.body;
+    const { first_name, last_name, email, password, phone_number, bio, profile_picture_url, date_of_birth } = req.body;
 
     // Call service to create user
-    const newUser = await createUserService(first_name, last_name, email, password_hash, phone_number, bio, profile_picture_url, date_of_birth);
+    const newUser = await createUserService(first_name, last_name, email, password, phone_number, bio, profile_picture_url, date_of_birth);
 
     // Success response
     handleResponse(res, 201, "User created successfully", newUser)
