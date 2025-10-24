@@ -1,4 +1,4 @@
-import { createUserService, deleteUserService, getAllUsersService, getUserByIdService, updateUserService } from "./user.model.js";
+import { createUserService, deleteUserService, getAllUsersService, getUserByIdService, updateUserService } from "./user.service.js";
 
 /// /
 // Standardized response function

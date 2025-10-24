@@ -8,7 +8,7 @@ userRouter.post("/user", createUser); // Create new user
 userRouter.get("/user", getAllUsers); // Get all users
 
 userRouter.get("/user/:user_id", getUserById); // Get single user by id
-userRouter.put("/user/:user_id", updateUser); // Update user
+userRouter.patch("/user/:user_id", updateUser); // Update user
 userRouter.delete("/user/:user_id", deleteUser); // Delete user
 
 // Export router
