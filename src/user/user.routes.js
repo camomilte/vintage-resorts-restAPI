@@ -2,7 +2,7 @@ import express from 'express';
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from './user.controller.js';
 import { validateBody } from '../middleware/validateBody.middleware.js';
 import { createUserSchema, updateUserSchema } from './user.validation.js';
-import { verifyRoles, verifyToken } from '../auth/auth.middleware.js';
+import { verifyToken } from '../auth/auth.middleware.js';
 
 // Initialize router for user-related endpoints
 const userRouter = express.Router();

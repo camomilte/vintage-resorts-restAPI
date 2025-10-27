@@ -5,6 +5,7 @@ import pool from '../config/db.js';
 import userRoutes from './user/user.routes.js';
 import errorHandling from './middleware/errorHandling.middleware.js';
 import authRouter from './auth/auth.routes.js';
+import listingRouter from './listing/listing.routes.js';
 
 dotenv.config();
 
@@ -15,9 +16,12 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors());
 
-// App routes
-app.use("/api", userRoutes);
+// User routes
+app.use("/api", userRoutes); 
+// Authorisation routes
 app.use("/api/auth", authRouter);
+// Listing routes
+app.use("/api/listings", listingRouter);
 
 // Error handler
 app.use(errorHandling);
