@@ -1,15 +1,5 @@
 import { createUserService, deleteUserService, getAllUsersService, getUserByIdService, updateUserService } from "./user.service.js";
-
-/// /
-// Standardized response function
-/// /
-const handleResponse = (res, status, message, data = null) => {
-  res.status(status).json({
-    status,
-    message,
-    data
-  });
-};
+import handleResponse from '../middleware/responseHandling.middleware.js';
 
 /// / 
 // Create user
