@@ -1,9 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import pool from './config/db.js';
+import pool from '../config/db.js';
 import userRoutes from './user/user.routes.js';
 import errorHandling from './middleware/ErrorHandler.js';
+import authRouter from './auth/auth.routes.js';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(cors());
 
 // App routes
 app.use("/api", userRoutes);
+app.use("/api/auth", authRouter);
 
 // Error handler
 app.use(errorHandling);
