@@ -1,5 +1,5 @@
-import { response } from "express";
 import handleResponse from "../middleware/responseHandling.middleware.js";
+import { createListingService, deleteListingService, getAllListingsService, getListingByIdService } from "./listing.service.js";
 
 /// /
 // Create listing
@@ -7,10 +7,12 @@ import handleResponse from "../middleware/responseHandling.middleware.js";
 export const createListing = async (req, res, next) => {
   try {
     // Destructure fields from request body
-    const { title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds } = req.body;
+    const { title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds, amenities } = req.body;
+    // Get user from token
+    const host_id = req.user.user_id;
 
     // Call service to create listing
-    const newListing = await createListingService(title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds);
+    const newListing = await createListingService(host_id, title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds, amenities);
 
     // Success response
     handleResponse(res, 201, "Listing created successfully", newListing);
@@ -73,8 +75,21 @@ export const getListingById = async (req, res, next) => {
 /// /
 export const deleteListing = async (req, res, next) => {
   try {
+    // Get listing id
+    const { listing_id } = req.params;
+    // Get host id
+    const host_id = req.user.user_id;
+
     // Call service to delete listing
-    const deletedListing = await deleteListingService(req.params.listing_id);
+    const deletedListing = await deleteListingService(listing_id, host_id);
+
+    // If no listing is found, throw error
+    if(!deletedListing) {
+      const error = new Error("Listing could not be found");
+      error.status = 404;
+      error.type = "https://example.com/resource-not-found"
+      throw error;
+    };
 
     // Success response
     handleResponse(res, 200, "Listing deleted", deletedListing);

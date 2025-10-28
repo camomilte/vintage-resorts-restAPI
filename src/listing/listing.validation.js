@@ -4,6 +4,14 @@ import Joi from "joi";
 // Schema for creating new listing
 /// /
 export const createListingSchema = Joi.object({
+/*   host_id: Joi.number()
+    .integer()
+    .required()
+    .messages({
+      "number.base": "host_id must be a number",
+      "any.required": "host_id is required"
+    }), */
+
   title: Joi.string()
     .min(5)
     .max(150)
@@ -128,9 +136,10 @@ export const createListingSchema = Joi.object({
     }),
 
   amenities: Joi.array()
-    .items(Joi.string())
+    .items(Joi.number().integer().min(1))
     .optional()
     .messages({
-      "array.base": "Amenities must be an array of strings",
+      "array.base": "Amenities must be an array of numbers (IDs)",
+      "number.base": "Each amenity must be a valid ID",
     }),
 })
