@@ -8,7 +8,7 @@ import { verifyToken } from '../auth/auth.middleware.js';
 const listingRouter = express.Router();
 
 // Create new listing
-listingRouter.post("/", validateBody(createListingSchema), verifyToken, createListing);
+listingRouter.post("/", verifyToken, createListing, validateBody(createListingSchema));
 
 // Get all listings
 listingRouter.get("/", getAllListings);
