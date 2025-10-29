@@ -11,6 +11,7 @@ import listingRouter from './listing/listing.routes.js';
 import amenityRouter from './listing/amenities/amenities.routes.js';
 // Error handler
 import errorHandling from './middleware/errorHandling.middleware.js';
+import resvRouter from './reservation/reservation.routes.js';
 
 dotenv.config();
 
@@ -28,7 +29,9 @@ app.use(cors());
 app.use("/api", userRoutes);                        // User routes
 app.use("/api/auth", authRouter);                   // Authorisation routes
 app.use("/api/listings/amenities", amenityRouter);  // Amenity routes
+//TODO: Add pets_allowed to all listings
 app.use("/api/listings", listingRouter);            // Listing routes
+app.use("/api/reservations", resvRouter);           // Reservation routes
 
 
 // Error handler
