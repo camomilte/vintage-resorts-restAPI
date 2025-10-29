@@ -4,12 +4,17 @@ export const validateBody = (schema) => (req, res, next) => {
   
   // If there are validation errors
   if (error) {
-    return res.status(400).json({
-      type: "https://example.com/validation-error",
-      title: "Invalid request body",
-      status: 400,
-      detail: error.details.map(d => d.message)
-    });
+    // Map over all Joi error details and extract info
+    const details = error.details.map((d) => ({
+      field: d.path.join("."), 
+      message: d.message,     
+    }));
+
+    const validationError = new Error("Invalid request body");
+    validationError.status = 400;
+    validationError.type = "https://example.com/validation-error";
+    validationError.detail = details;
+    return next(validationError);
   }
 
   next();

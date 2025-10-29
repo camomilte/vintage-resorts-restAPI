@@ -65,7 +65,12 @@ export const updateUserService = async (user_id, updates) => {
 
   // Check that there are fields to update provided
   if (setClauses.length === 0) {
-    throw new Error("No valid fields provided for update");
+    const error = new Error("No valid fields provided for update");
+    error.status = 400;
+    error.type = "https://example.com/missing-field";
+    
+    // Pass to middleware
+    return next(error);
   }
 
   // Add user_id as final parameter

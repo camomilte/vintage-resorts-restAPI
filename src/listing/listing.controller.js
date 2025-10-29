@@ -56,7 +56,9 @@ export const getListingById = async (req, res, next) => {
       const error = new Error("Listing could not be found");
       error.status = 404;
       error.type = "https://example.com/not-found"
-      throw error;
+      
+      // Pass to middleware
+      return next(error);
     };
 
     // Success response
@@ -83,12 +85,14 @@ export const deleteListing = async (req, res, next) => {
     // Call service to delete listing
     const deletedListing = await deleteListingService(listing_id, host_id);
 
-    // If no listing is found, throw error
+
     if(!deletedListing) {
       const error = new Error("Listing could not be found");
       error.status = 404;
-      error.type = "https://example.com/resource-not-found"
-      throw error;
+      error.type = "https://example.com/not-found";
+      
+      // Pass to middleware
+      return next(error);
     };
 
     // Success response

@@ -49,7 +49,14 @@ export const getUserById = async (req, res, next) => {
     const user = await getUserByIdService(req.params.user_id);
 
     // If no user is found, return error
-    if(!user) return handleResponse(res, 404, "User not found!");
+    if (!user) {
+      const error = new Error("User could not be found");
+      error.status = 404;
+      error.type = "http://example.com/resource-not-found";
+
+      // Pass to middleware
+      return next(error);
+    }
 
     // Success response
     handleResponse(res, 200, "User fetched successfully", user);
@@ -69,10 +76,24 @@ export const updateUser = async (req, res, next) => {
     const userId = req.params.user_id;
 
     // Validate user Id
-    if (isNaN(userId)) return handleResponse(res, 400, "invalid user ID");
+    if (isNaN(userId)) {
+      const error = new Error("Invalid user ID. User id must be a valid number");
+      error.status = 400;
+      error.type = "http://example.com/invalid-input";
+
+      // Pass to middleware
+      return next(error);
+    }
 
     // Check if user id exists
-    if(!userId) return handleResponse(res, 404, "User not found!");
+    if (!userId) {
+      const error = new Error("User could not be found");
+      error.status = 404;
+      error.type = "http://example.com/resource-not-found";
+
+      // Pass to middleware
+      return next(error);
+    }
 
     // Call service to update user
     const updatedUser = await updateUserService(userId, req.body);
@@ -91,8 +112,25 @@ export const updateUser = async (req, res, next) => {
 /// /
 export const deleteUser = async (req, res, next) => {
   try {
-    const deletedUser = await deleteUserService(req.params.user_id);
+    // Get user id
+    const { user_id } = req.params;
+
+    // Call service to delete user
+    const deletedUser = await deleteUserService(user_id);
+
+    // If user is not found, throw error
+    if(!deletedUser) {
+      const error = new Error("User could not be found");
+      error.status = 404;
+      error.type = "https://example.com/resource-not-found";
+
+      // Pass to middleware
+      return next(error);
+    }
+
+    // Success repsonse
     handleResponse(res, 200, "User deleted successfully", deleteUser);
+
   } catch (err) {
     next(err)
   }

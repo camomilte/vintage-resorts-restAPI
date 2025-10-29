@@ -38,7 +38,9 @@ export const loginUser = async (req, res, next) => {
       const error = new Error("One or more fields are missing/empty");
       error.status = 400;
       error.type = "https://example.com/missing-field";
-      throw error;
+      
+      // Pass to middleware
+      return next(error);
     };
 
     // Call login service

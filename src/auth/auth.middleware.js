@@ -9,12 +9,13 @@ export const verifyToken = (req, res, next) => {
     if(!authHeader?.startsWith('Bearer ')) {
 
       // Throw error if token is invalid or does not exist
-      return res.status(401).json({
-        type: "https://example.com/unauthorized",
-        title: "Unauthorized",
-        status: 401,
-        detail: "Access token is missing or invalid",
-      });
+      const error = new Error("Access token missing or invalid");
+      error.status = 401;
+      error.type = "https://example.com/unauthorized";
+
+      // Pass to middleware
+      return next(error);
+
     }
 
     // Extract token and removing "Bearer 
@@ -29,14 +30,22 @@ export const verifyToken = (req, res, next) => {
     // Continue to the next middleware or controller
     next();
 
-  } catch (error) {
-    // Handle expired or invalid token
-    return res.status(401).json({
-      type: "https://example.com/invalid-token",
-      title: "Invalid or Expired Token",
-      status: 401,
-      detail: err.message,
-    });    
+  } catch (err) {
+    // Handle expired token
+    if (err.name === "TokenExpiredError") {
+      const error = new Error("Access token has expired");
+      error.status = 401;
+      error.type = "https://example.com/expired-token";
+      
+      return next(error);
+    }
+
+    // Handle invalid token
+    const error = new Error("Invalid authentication token");
+    error.status = 401;
+    error.type = "https://example.com/invalid-token";
+    error.title = "Invalid Token";
+    next(error);
   }
 };
 
@@ -45,22 +54,19 @@ export const verifyRoles = (...allowedRoles) => {
 
     // Check if user has a role
     if(!req.user.role) {
-      return res.status(403).json({ 
-        type: "https://example.com/role-missing",
-        title: "No role assigned",
-        status: 403,
-        detail: err.message
-      });
+      const error = new Error("This user has no role assigned")
+      error.status = 403;
+      error.type = "https://example.com/role-missing";
+
+      return next(error);
     };
 
     // Check if role is allowed
     if(!allowedRoles.includes(req.user.role)) {
-      return res.status(403).json({ 
-        type: "https://example.com/access-denied",
-        title: "Role does not have access",
-        status: 403,
-        detail: err.message
-      });
+      const error = new Error("Role does not have access or permission");
+      error.status = 403;
+      error.type = "https://example.com/access-denied";
+      return next(error);
     };
 
     // Continue to the next middleware or controller
