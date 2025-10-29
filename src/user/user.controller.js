@@ -9,6 +9,8 @@ export const createUser = async (req, res, next) => {
     // Destructure fields from request body
     const { first_name, last_name, email, password, phone_number, bio, profile_picture_url, date_of_birth } = req.body;
 
+    //TODO: Add logic that checks that email is not already in use
+
     // Call service to create user
     const newUser = await createUserService(first_name, last_name, email, password, phone_number, bio, profile_picture_url, date_of_birth);
 

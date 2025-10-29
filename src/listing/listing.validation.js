@@ -4,13 +4,13 @@ import Joi from "joi";
 // Schema for creating new listing
 /// /
 export const createListingSchema = Joi.object({
-/*   host_id: Joi.number()
+  host_id: Joi.number()
     .integer()
     .required()
     .messages({
       "number.base": "host_id must be a number",
       "any.required": "host_id is required"
-    }), */
+    }),
 
   title: Joi.string()
     .min(5)

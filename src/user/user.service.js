@@ -25,6 +25,9 @@ export const getUserByIdService = async (user_id) => {
 // Create user
 /// /
 export const createUserService = async (first_name, last_name, email, password, phone_number, bio, profile_picture_url, date_of_birth) => {
+
+  //TODO: Add logic that checks that email is not already in use
+  
   // Hash password
   const password_hash = await bcrypt.hash(password, 10);
 

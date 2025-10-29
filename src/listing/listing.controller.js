@@ -93,7 +93,7 @@ export const deleteListing = async (req, res, next) => {
       
       // Pass to middleware
       return next(error);
-    };
+    }
 
     // Success response
     handleResponse(res, 200, "Listing deleted", deletedListing);
