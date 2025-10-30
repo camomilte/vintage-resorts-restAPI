@@ -1,4 +1,4 @@
-import handleResponse from "../../middleware/responseHandling.middleware.js";
+import handleResponse from "../middleware/responseHandling.middleware.js";
 import { createAmenityService, deleteAmenityService, getAllAmenitiesService, getAmenityByIdService } from "./amenities.service.js";
 
 /// /

@@ -7,10 +7,10 @@ import { createUserSchema } from '../user/user.validation.js';
 const authRouter = express.Router();
 
 // Register new user
-authRouter.post("/register", validateBody(createUserSchema), registerUser);
+authRouter.post("/users/register", validateBody(createUserSchema), registerUser);
 
 // Login user
-authRouter.post("/login", loginUser);
+authRouter.post("/auth/login", loginUser);
 
 // Export router
 export default authRouter;

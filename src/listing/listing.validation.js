@@ -142,4 +142,10 @@ export const createListingSchema = Joi.object({
       "array.base": "Amenities must be an array of numbers (IDs)",
       "number.base": "Each amenity must be a valid ID",
     }),
+
+  pets_allowed: Joi.boolean()
+    .required()
+    .messages({
+      "any.required": "pets_allowed is required"
+    })
 })
