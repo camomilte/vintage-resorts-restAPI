@@ -11,7 +11,7 @@ const resvRouter = express.Router();
 resvRouter.post("/users/:user_id/reserv", verifyToken, createReservation, validateBody(createReservationSchema));
 
 // Get reservation from a user
-resvRouter.get("/users/:user_id/reservations", getAllReservationsUser);
+resvRouter.get("/users/:user_id/reservations", verifyToken, getAllReservationsUser);
 
 // Get specific reservation
 resvRouter.get("/users/:user_id/reservations/:resv_id", getReservationById);
