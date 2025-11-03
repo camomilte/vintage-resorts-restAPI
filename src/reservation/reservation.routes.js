@@ -1,8 +1,8 @@
 import express from 'express';
 import { verifyToken } from '../auth/auth.middleware.js';
 import { validateBody } from '../middleware/validateBody.middleware.js';
-import { createReservationSchema, updateReservationSchema } from './reservation.validation.js';
-import { createReservation, deleteReservation, getAllReservationsListing, getAllReservationsUser, getReservationById, updateReservation } from './reservation.controller.js';
+import { createReservationSchema } from './reservation.validation.js';
+import { createReservation, deleteReservation, getAllReservationsUser, getReservationById } from './reservation.controller.js';
 
 // Initialize router for reservation endpoints
 const resvRouter = express.Router();
@@ -16,11 +16,12 @@ resvRouter.get("/users/:user_id/reservations", verifyToken, getAllReservationsUs
 // Get specific reservation
 resvRouter.get("/users/:user_id/reservations/:resv_id", getReservationById);
 
-// Update reservation
+// TODO
+/* // Update reservation
 resvRouter.patch("/users/:user_id/reservations/:resv_id", verifyToken, updateReservation, validateBody(updateReservationSchema));
 
-// Get all reservation from a listing
-resvRouter.get("/listings/:listing_id/reservations", getAllReservationsListing);
+// Get all reservations from a listing
+resvRouter.get("/listings/:listing_id/reservations", getAllReservationsListing); */
 
 // Delete reservation
 resvRouter.delete("/users/:user_id/reservations/:resv_id", verifyToken, deleteReservation);

@@ -45,4 +45,26 @@ export const getReservationByIdService = async (guest_id, resv_id) => {
 
   // If found, return reservation
   return result.rows[0];
-}
+};
+
+/// /
+// Delete reservation
+/// /
+export const deleteReservationService = async (guest_id, resv_id) => {
+  // Check if reservation exists 
+  const reservation = await pool.query(
+    "SELECT * FROM reservations WHERE guest_id = $1 AND reservation_id = $2",
+    [guest_id, resv_id]
+  );
+
+  // If no reservation exists retunr null
+  if (reservation.rows.length === 0) {
+    return null;
+  }
+
+  // If it exists, delete it
+  await pool.query("DELETE FROM reservations WHERE reservation_id = $1", [resv_id]);
+
+  // Return deleted reservation
+  return reservation.rows[0];
+};

@@ -1,6 +1,5 @@
-import express from 'express';
 import handleResponse from '../middleware/responseHandling.middleware.js';
-import { createReservationService, getAllReservationsUserService, getReservationByIdService } from './reservation.service.js';
+import { createReservationService, deleteReservationService, getAllReservationsUserService, getReservationByIdService } from './reservation.service.js';
 
 /// /
 // Create reservation
@@ -84,13 +83,38 @@ export const getReservationById = async (req, res, next) => {
   }
 };
 
-export const updateReservation = async () => {
+// TODO
+/* export const updateReservation = async () => {
 
 }
 
 export const getAllReservationsListing = async () => {
 
-}
-export const deleteReservation = async () => {
+} */
 
-}
+export const deleteReservation = async (req, res, next) => {
+  try {
+    // Get reservation id
+    const  { resv_id } = req.params;
+    // Get guest id
+    const guest_id = req.user.user_id;
+
+    // Call service to delete reservation
+    const deletedReservation = await deleteReservationService( guest_id, resv_id);
+
+    if(!deleteReservation) {
+      const error = new Error("Reservation could not be found");
+      error.status = 404;
+      error.type =  "https://example.com/resource-not-found";
+
+      // Pass to middleware
+      return next(error);
+    }
+
+    // Success response
+    handleResponse(res, 200, "reservation deleted", deletedReservation);
+
+  } catch (err) {
+    next(err);
+  }
+};
