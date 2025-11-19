@@ -16,6 +16,17 @@ try {
     // Destructure fields from request body
     const { first_name, last_name, email, password, phone_number, bio, profile_picture_url, date_of_birth } = req.body;
 
+    // Validate required fields
+    if(!first_name || !last_name || !email || !password || !phone_number || !date_of_birth) {
+      const error = new Error("One or more fields are missing/empty");
+      error.status = 400;
+      error.type = "https://example.com/missing-field";
+       
+      // Pass to middleware
+      return next(error);
+    };
+      
+
     // Call service to create user
     const newUser = await registerService(first_name, last_name, email, password, phone_number, bio, profile_picture_url, date_of_birth);
 
@@ -47,7 +58,7 @@ export const loginUser = async (req, res, next) => {
     const { token, user } = await loginService(email, password);
 
     // Success response
-    handleResponse(res, 200, "Login successful", { token })
+    res.status(200).json({ token, user });
 
   } catch (err) {
     next(err);

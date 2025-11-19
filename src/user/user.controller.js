@@ -12,10 +12,10 @@ export const createUser = async (req, res, next) => {
     //TODO: Add logic that checks that email is not already in use
 
     // Call service to create user
-    const newUser = await createUserService(first_name, last_name, email, password, phone_number, bio, profile_picture_url, date_of_birth);
+    const data = await createUserService(first_name, last_name, email, password, phone_number, bio, profile_picture_url, date_of_birth);
 
     // Success response
-    handleResponse(res, 201, "User created successfully", newUser)
+    res.status(200).json({data});
 
   } catch (err) {
 
@@ -43,15 +43,27 @@ export const getAllUsers = async (req, res, next) => {
 };
 
 /// /
-// Get single user by id
+// Function to get current user
 /// /
-export const getUserById = async (req, res, next) => {
+export const getMe = async (req, res, next) => {
   try {
-    // Call service to fecth user by id
-    const user = await getUserByIdService(req.params.user_id);
+    const user_id = req.user.user_id;
+
+    // If there is no user id throw error
+    if (!user_id) {
+      const error = new Error("Missing user id");
+      error.status = 404;
+      error.type = "http://example.com/resource-not-found";
+
+      // Pass to middleware
+      return next(error);
+    }
+
+    // Call service to fetch current user
+    const data = await getUserByIdService(user_id);
 
     // If no user is found, return error
-    if (!user) {
+    if (!data) {
       const error = new Error("User could not be found");
       error.status = 404;
       error.type = "http://example.com/resource-not-found";
@@ -61,7 +73,45 @@ export const getUserById = async (req, res, next) => {
     }
 
     // Success response
-    handleResponse(res, 200, "User fetched successfully", user);
+    res.status(200).json({
+      user_id: data.user_id,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      email: data.email,
+      phone_number: data.phone_number,
+      bio: data.bio,
+      profile_picture_url: data.profile_picture_url,
+      created_at: data.created_at,
+      role: data.role,
+      date_of_birth: data.date_of_birth
+    });
+
+  } catch (err) {
+    // Pass error to error handler
+    next(err);
+  }
+}
+
+/// /
+// Get single user by id
+/// /
+export const getUserById = async (req, res, next) => {
+  try {
+    // Call service to fecth user by id
+    const data = await getUserByIdService(req.params.user_id);
+
+    // If no user is found, return error
+    if (!data) {
+      const error = new Error("User could not be found");
+      error.status = 404;
+      error.type = "http://example.com/resource-not-found";
+
+      // Pass to middleware
+      return next(error);
+    }
+
+    // Success response
+    res.status(200).json({data});
 
   } catch (err) {
 

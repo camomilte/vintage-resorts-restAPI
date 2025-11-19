@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from './user.controller.js';
+import { createUser, deleteUser, getAllUsers, getMe, getUserById, updateUser } from './user.controller.js';
 import { validateBody } from '../middleware/validateBody.middleware.js';
 import { createUserSchema, updateUserSchema } from './user.validation.js';
 import { verifyToken } from '../auth/auth.middleware.js';
@@ -12,6 +12,9 @@ userRouter.post("/users", validateBody(createUserSchema), createUser);
 
 // Get all users
 userRouter.get("/users", getAllUsers, verifyToken); 
+
+// Get current user
+userRouter.get("/users/me", verifyToken, getMe);
 
 // Get single user by id
 userRouter.get("/users/:user_id", getUserById, verifyToken); 

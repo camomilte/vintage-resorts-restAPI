@@ -30,10 +30,10 @@ export const createListing = async (req, res, next) => {
 export const getAllListings = async (req, res, next) => {
   try {
     // Call service to fetch all listings
-    const listings = await getAllListingsService();
+    const data = await getAllListingsService();
 
-    // Success response
-    handleResponse(res, 200, "All lisings fetched", listings);
+    // Return data
+    res.status(200).json({data});
 
   } catch (err) {
     
@@ -49,10 +49,10 @@ export const getAllListings = async (req, res, next) => {
 export const getListingById = async (req, res, next) => {
   try {
     // Call service to fetch listing by id
-    const listing = await getListingByIdService(req.params.listing_id);
+    const data = await getListingByIdService(req.params.listing_id);
 
     // If no listing is found, return error
-    if(!listing) {
+    if(!data) {
       const error = new Error("Listing could not be found");
       error.status = 404;
       error.type = "https://example.com/not-found"
@@ -61,8 +61,8 @@ export const getListingById = async (req, res, next) => {
       return next(error);
     };
 
-    // Success response
-    handleResponse(res, 200, "Listing fetched successfully", listing);
+    // Return data
+    res.status(200).json({data});
 
   } catch (err) {
     
