@@ -1,7 +1,7 @@
 import express from 'express';
 import { validateBody } from '../middleware/validateBody.middleware.js';
 import { createListingSchema } from './listing.validation.js';
-import { createListing, deleteListing, getAllListings, getListingById } from './listing.controller.js';
+import { createListing, deleteListing, getAllListings, getListingById, getListingLocations } from './listing.controller.js';
 import { verifyToken } from '../auth/auth.middleware.js';
 
 // Initialize router for listing endpoints
@@ -12,6 +12,9 @@ listingRouter.post("/listings", verifyToken, createListing, validateBody(createL
 
 // Get all listings
 listingRouter.get("/listings", getAllListings);
+
+// Get all locations from listing
+listingRouter.get("/listings/locations", getListingLocations);
 
 // Get single listing by id
 listingRouter.get("/listings/:listing_id", getListingById);

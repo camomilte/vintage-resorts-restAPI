@@ -66,6 +66,16 @@ export const getListingByIdService = async (listing_id) => {
   return result.rows[0];
 };
 
+/// /
+// Get all listing locations (city, country) service
+/// /
+export const getListingLocationsService = async () => {
+  // Execute SQL query to get all values in column city and country
+  const result = await pool.query("SELECT city, country FROM listings;");
+  // Return array
+  return result.rows;
+}
+
 /// / 
 // Delete listing service
 /// /

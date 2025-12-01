@@ -1,5 +1,5 @@
 import handleResponse from "../middleware/responseHandling.middleware.js";
-import { createListingService, deleteListingService, getAllListingsService, getListingByIdService } from "./listing.service.js";
+import { createListingService, deleteListingService, getAllListingsService, getListingByIdService, getListingLocationsService } from "./listing.service.js";
 
 /// /
 // Create listing
@@ -71,6 +71,22 @@ export const getListingById = async (req, res, next) => {
 
   }
 };
+
+/// /
+// Get all values in fromm column city and country from listings
+/// /
+export const getListingLocations = async (req, res, next) => {
+  try {
+    // Call service to get all locations (city, country)
+    const data = await getListingLocationsService();
+
+    // Success response
+    res.status(200).json({data});
+  } catch (err) {
+    // Pass error to errorHandler
+    next(err);
+  }
+}
 
 /// /
 // Delete listing
