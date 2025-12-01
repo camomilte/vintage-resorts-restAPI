@@ -17,11 +17,21 @@ export const createAmenityService = async (amenity_name, description) => {
 };
 
 /// /
-// Get all amenities service
+// Get all amenities (except eras) service
 /// /
 export const getAllAmenitiesService = async () => {
-  // Execute SQL query to select all amenities from 'amenities' table
-  const result = await pool.query("SELECT * FROM amenities");
+  // Execute SQL query to select all amenities except where description is Era
+  const result = await pool.query("SELECT * FROM amenities WHERE description IS NULL OR description <> 'Era';");
+  // Return array
+  return result.rows;
+};
+
+/// /
+// Get all eras service
+/// /
+export const getAllErasService = async () => {
+  // Execute SQL query to select all eras
+  const result = await pool.query("SELECT * FROM amenities WHERE description = 'Era';");
   // Return array
   return result.rows;
 };

@@ -147,5 +147,13 @@ export const createListingSchema = Joi.object({
     .required()
     .messages({
       "any.required": "pets_allowed is required"
-    })
+    }),
+  
+  images: Joi.array()
+    .items(Joi.string().uri()
+    .required()
+    .messages({
+      "array.base": "Images must be an array of url",
+      "string.base": "Each image must be string"
+    }))
 })

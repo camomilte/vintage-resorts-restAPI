@@ -7,12 +7,12 @@ import { createListingService, deleteListingService, getAllListingsService, getL
 export const createListing = async (req, res, next) => {
   try {
     // Destructure fields from request body
-    const { title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds, amenities } = req.body;
+    const { title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds, amenities, images } = req.body;
     // Get user from token
     const host_id = req.user.user_id;
 
     // Call service to create listing
-    const newListing = await createListingService(host_id, title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds, amenities);
+    const newListing = await createListingService(host_id, title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds, amenities, images);
 
     // Success response
     handleResponse(res, 201, "Listing created successfully", newListing);

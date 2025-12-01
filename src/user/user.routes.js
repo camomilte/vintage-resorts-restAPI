@@ -11,7 +11,7 @@ const userRouter = express.Router();
 userRouter.post("/users", validateBody(createUserSchema), createUser); 
 
 // Get all users
-userRouter.get("/users", getAllUsers, verifyToken); 
+userRouter.get("/users", verifyToken, getAllUsers); 
 
 // Get current user
 userRouter.get("/users/me", verifyToken, getMe);
@@ -23,7 +23,7 @@ userRouter.get("/users/:user_id", getUserById, verifyToken);
 userRouter.patch("/users/:user_id", validateBody(updateUserSchema), verifyToken, updateUser); 
 
 // Delete user
-userRouter.delete("/users/:user_id", deleteUser, verifyToken); 
+userRouter.delete("/users/:user_id", verifyToken, deleteUser); 
 
 // Export router
 export default userRouter;

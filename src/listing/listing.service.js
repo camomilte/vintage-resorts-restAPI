@@ -4,7 +4,7 @@ import pool from "../../config/db.js"
 /// /
 // Create new listing service
 /// /
-export const createListingService = async (host_id, title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds, amenities = []) => {
+export const createListingService = async (host_id, title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds, amenities, images = []) => {
   // Start transaction
   const client = await pool.connect();
 
@@ -13,8 +13,8 @@ export const createListingService = async (host_id, title, description, address,
 
     // Execute SQL query to insert values to listings table
     const result = await client.query(
-      "INSERT INTO listings (host_id, title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *;",
-      [host_id, title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds]
+      "INSERT INTO listings (host_id, title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds, images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *;",
+      [host_id, title, description, address, city, country, price_per_night, max_adults, max_children, max_infants, max_pets, num_bedrooms, num_bathrooms, num_beds, images]
     );
 
     const newListing = result.rows[0];
@@ -23,7 +23,10 @@ export const createListingService = async (host_id, title, description, address,
     if (amenities.length > 0) {
       const amenityValues = amenities.map((aId) => `(${newListing.listing_id}, ${aId})`).join(",");
       await client.query(
-        `INSERT INTO listing_amenities (listing_id, amenity_id) VALUES ${amenityValues};`
+        `INSERT INTO listing_amenities (listing_id, amenity_id) 
+        SELECT $1, UNNEST ($2::int[]);`,
+
+        [newListing.listing_id, amenities]
       );
     }
 

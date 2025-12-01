@@ -2,7 +2,7 @@ import express from 'express';
 import { validateBody } from '../middleware/validateBody.middleware.js';
 import { createAmenitySchema } from './amenities.validation.js';
 import { verifyToken } from '../auth/auth.middleware.js';
-import { createAmenity, deleteAmenity, getAllAmenities, getAmenityById } from './amenities.controller.js';
+import { createAmenity, deleteAmenity, getAllAmenities, getAllEras, getAmenityById } from './amenities.controller.js';
 
 // Initialize router for amneity endpoints
 const amenityRouter = express.Router();
@@ -12,6 +12,9 @@ amenityRouter.post("/listings/amneities", validateBody(createAmenitySchema), ver
 
 // Get all amenities
 amenityRouter.get("/listings/amenities", getAllAmenities);
+
+// Get all eras
+amenityRouter.get("/listings/eras", getAllEras);
 
 // Get single amenity by id
 amenityRouter.get("/listings/amenities/:amenity_id", getAmenityById);

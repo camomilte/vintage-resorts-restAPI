@@ -1,5 +1,5 @@
 import handleResponse from "../middleware/responseHandling.middleware.js";
-import { createAmenityService, deleteAmenityService, getAllAmenitiesService, getAmenityByIdService } from "./amenities.service.js";
+import { createAmenityService, deleteAmenityService, getAllAmenitiesService, getAllErasService, getAmenityByIdService } from "./amenities.service.js";
 
 /// /
 // Create amenity
@@ -22,21 +22,37 @@ export const createAmenity = async (req, res, next) => {
 };
 
 /// /
-// Get all amenities
+// Get all amenities (except eras)
 /// /
 export const getAllAmenities = async (req, res, next) => {
   try {
     // Call service to get all amentities
-    const amenities = await getAllAmenitiesService();
+    const data = await getAllAmenitiesService();
 
     // Success response
-    handleResponse(res, 200, "All amenities fetched", amenities);
+    res.status(200).json({data});
 
   } catch (err) {
     
     //Pass error to errorHandler
     next(err);
+  }
+}
 
+/// /
+// Get all eras
+/// /
+export const getAllEras = async (req, res, next) => {
+  try {
+    // Call service to get eras
+    const data = await getAllErasService();
+
+    //Success response
+    res.status(200).json({data});
+    
+  } catch (err) {
+    //Pass error to errorHandler
+    next(err);
   }
 }
 
