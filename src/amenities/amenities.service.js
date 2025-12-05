@@ -37,6 +37,19 @@ export const getAllErasService = async () => {
 };
 
 /// /
+// Get all amenities from listing service
+/// /
+export const getAmenitiesByListingService = async (listing_id) => {
+  // Execute SQL query
+  const result = await pool.query(
+    "SELECT a.* FROM amenities a JOIN listing_amenities la ON la.amenity_id = a.amenity_id WHERE la.listing_id = $1;",
+    [listing_id]
+  );
+  // Return array
+  return result.rows;
+}
+
+/// /
 // Get amenity by id service
 /// /
 export const getAmenityByIdService = async (amenity_id) => {

@@ -1,5 +1,5 @@
 import handleResponse from "../middleware/responseHandling.middleware.js";
-import { createAmenityService, deleteAmenityService, getAllAmenitiesService, getAllErasService, getAmenityByIdService } from "./amenities.service.js";
+import { createAmenityService, deleteAmenityService, getAllAmenitiesService, getAllErasService, getAmenitiesByListingService, getAmenityByIdService } from "./amenities.service.js";
 
 /// /
 // Create amenity
@@ -49,10 +49,41 @@ export const getAllEras = async (req, res, next) => {
 
     //Success response
     res.status(200).json({data});
-    
+
   } catch (err) {
     //Pass error to errorHandler
     next(err);
+  }
+}
+
+/// /
+// Get all amenities from listing
+/// /
+export const getAmenitiesByListing = async (req, res, next) => {
+  try {
+    // Get listing id from req.params
+    const listing_id = req.params.listing_id
+
+    if (!listing_id) {
+      const error = new Error("Listing_id could not be found");
+      error.status = 404;
+      error.type = "http://example.com/resource-not-found";
+
+      // Pass to middleware
+      return next(error);
+    }
+
+    //TODO: Add error when listing_id does not match any existing listing
+
+    // Call service to get amenities by listing_id
+    const data = await getAmenitiesByListingService(listing_id);
+
+    // Success response
+    res.status(200).json({data});
+
+  } catch (err) {
+    // Pass error to middleware
+    next(err)
   }
 }
 

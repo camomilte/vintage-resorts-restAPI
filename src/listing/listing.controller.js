@@ -1,5 +1,5 @@
 import handleResponse from "../middleware/responseHandling.middleware.js";
-import { createListingService, deleteListingService, getAllListingsService, getListingByIdService, getListingLocationsService } from "./listing.service.js";
+import { createListingService, deleteListingService, getAllListingsService, getFilteredListingsService, getListingByIdService, getListingLocationsService } from "./listing.service.js";
 
 /// /
 // Create listing
@@ -86,6 +86,26 @@ export const getListingLocations = async (req, res, next) => {
     // Pass error to errorHandler
     next(err);
   }
+}
+
+/// /
+// Get filtered listings
+/// /
+export const getFilteredListings = async (req, res, next) => {
+ try {
+  // Get filters from req.body
+  const filters = req.body;
+
+  // Call service to fetch filtered listings
+  const data = await getFilteredListingsService(filters);
+
+  // Response 
+  res.status(200).json({data});
+
+  } catch (err) {
+    // Pass error to errorHandler
+    next(err);
+ }
 }
 
 /// /

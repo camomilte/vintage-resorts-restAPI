@@ -76,6 +76,59 @@ export const getListingLocationsService = async () => {
   return result.rows;
 }
 
+/// /
+// Service to get filtered listings
+/// /
+export const getFilteredListingsService = async (filters) => {
+  // Destructure filters
+  const { locations = [], amenities = [], eras = [] } = filters;
+
+  // Begin on base query to select listings
+  let query = `
+    SELECT DISTINCT l.*
+    FROM listings l
+    LEFT JOIN listing_amenities la ON la.listing_id = l.listing_id
+    LEFT JOIN amenities a ON a.amenity_id = la.amenity_id
+  `;
+
+  // Array to hold WHERE conditions
+  const conditions = [];
+  // Array to hold values
+  const values = [];
+  // Counter to track parameter index for placeholders
+  let i = 1;
+
+  // If locations selected filter listings by location
+  if(locations.length > 0) {
+    conditions.push(`l.city = ANY($${i})`);
+    values.push(locations);
+    i++;
+  }
+
+  if(amenities.length > 0) {
+    conditions.push(`a.amenity_id = ANY($${i})`);
+    values.push(amenities);
+    i++;
+  }
+
+  if(eras.length > 0) {
+    conditions.push(`a.amenity_id = ANY($${i})`);
+    values.push(eras);
+    i++;
+  }
+
+  if (conditions.length > 0) {
+    query += " WHERE " + conditions.join(" AND ");
+  }
+
+  const result = await pool.query(query, values);
+
+  console.log("SQL Query:", query);
+  console.log("Values:", values);
+
+  return result.rows;
+}
+
 /// / 
 // Delete listing service
 /// /
