@@ -7,16 +7,16 @@ import { createReservationService, deleteReservationService, getAllReservationsU
 export const createReservation = async (req, res, next) => {
   try {
     // Destructure fields from request body
-    const { listing_id, start_date, end_date, num_adults, num_children, num_infants, num_pets, total_price } = req.body;
+    const { listing_id, start_date, end_date, num_adults, num_children, num_infants, num_pets, total_price, payment_method } = req.body;
 
     // Get user from token
     const guest_id = req.user.user_id;
 
     // Call service to create reservation
-    const newReservation = await createReservationService(guest_id, listing_id, start_date, end_date, num_adults, num_children, num_infants, num_pets, total_price);
+    const data = await createReservationService(guest_id, listing_id, start_date, end_date, num_adults, num_children, num_infants, num_pets, total_price, payment_method);
 
     // Success respone
-    handleResponse(res, 201, "Reservation created successfully", newReservation);
+    res.status(200).json({data});
 
   } catch (err) {
     next(err);
