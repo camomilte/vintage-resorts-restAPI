@@ -97,14 +97,14 @@ export const createReservationSchema = Joi.object({
       "number.positive": "total_price must be greater than 0",
       "any.required": "total_price is required"
     }),
-
-/*   status: Joi.string()
-    .default()
+  
+  payment_method: Joi.string()
+    .valid('PayPal', 'Debit', 'Klarna', 'Google_Pay', 'Swish')
     .required()
     .messages({
-    
-    }) */
-
+      "any.required": "payment_method is required",
+      "any.valid": "payment_method must be one of following: PayPal, Debit, Klarna, Google_Pay, Swish"
+    }),
 });
 
 /// /
