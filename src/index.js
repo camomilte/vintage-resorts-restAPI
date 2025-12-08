@@ -12,7 +12,6 @@ import amenityRouter from './amenities/amenities.routes.js';
 // Error handler
 import errorHandling from './middleware/errorHandling.middleware.js';
 import resvRouter from './reservation/reservation.routes.js';
-import paymentRouter from './payment/payment.routes.js';
 
 dotenv.config();
 
@@ -33,7 +32,6 @@ app.use("/api", amenityRouter);  // Amenity routes
 //TODO: Add pets_allowed to all listings
 app.use("/api", listingRouter);            // Listing routes
 app.use("/api", resvRouter);           // Reservation routes
-app.use("/api", paymentRouter); // Payment routes
 
 
 // Error handler
